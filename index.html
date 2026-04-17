@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full-Stack App (Student Build)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="not-authenticated">
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#/">Full-Stack App (Your Full Name)</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav gap-2 align-items-center">
+          <!-- Logged-out links -->
+          <li class="nav-item role-logged-out">
+            <a class="nav-link" href="#/login">Login</a>
+          </li>
+          <li class="nav-item role-logged-out">
+            <a class="nav-link" href="#/register">Register</a>
+          </li>
+
+          <!-- Logged-in dropdown -->
+          <li class="nav-item dropdown role-logged-in">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+              <span id="nav-username">User</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="#/requests">My Requests</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item text-danger" href="#" id="logout-btn">Logout</a></li>
+            </ul>
+          </li>
+
+          <!-- Admin-only links -->
+          <li class="nav-item role-admin"><a class="nav-link" href="#/employees">Employees</a></li>
+          <li class="nav-item role-admin"><a class="nav-link" href="#/accounts">Accounts</a></li>
+          <li class="nav-item role-admin"><a class="nav-link" href="#/departments">Departments</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="container my-4">
+
+    <!-- HOME PAGE -->
+    <section id="home-page" class="page active">
+      <div class="text-center py-5">
+        <h1 class="display-4 fw-bold text-primary">Welcome!</h1>
+        <p class="lead text-muted">A role-based Single Page App built from scratch.</p>
+        <div class="role-logged-out">
+          <a href="#/login" class="btn btn-primary me-2">Login</a>
+          <a href="#/register" class="btn btn-outline-primary">Register</a>
+        </div>
+        <div class="role-logged-in">
+          <a href="#/profile" class="btn btn-success">Go to Profile</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTER PAGE -->
+    <section id="register-page" class="page">
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h3 class="mb-3 text-center">Register</h3>
+              <form id="register-form" novalidate>
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="reg-first" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="reg-last" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="reg-email" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password <small class="text-muted">(min 6 chars)</small></label>
+                  <input type="password" class="form-control" id="reg-password" required minlength="6" />
+                </div>
+                <div id="reg-error" class="alert alert-danger d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+              </form>
+              <p class="text-center mt-3 mb-0">Already have an account? <a href="#/login">Login</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERIFY EMAIL PAGE -->
+    <section id="verify-email-page" class="page">
+      <div class="row justify-content-center">
+        <div class="col-md-5 text-center">
+          <div class="card shadow-sm p-4">
+            <div class="mb-3 fs-1">📧</div>
+            <h3>Verify Your Email</h3>
+            <p id="verify-msg" class="text-muted">Verification sent to your email.</p>
+            <button id="simulate-verify-btn" class="btn btn-success">✅ Simulate Email Verification</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN PAGE -->
+    <section id="login-page" class="page">
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h3 class="mb-3 text-center">Login</h3>
+              <form id="login-form" novalidate>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="login-email" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" id="login-password" required />
+                </div>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+              </form>
+              <p class="text-center mt-3 mb-0">No account? <a href="#/register">Register</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section id="profile-page" class="page">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h3 class="mb-4">My Profile</h3>
+              <div id="profile-info"></div>
+              <button class="btn btn-outline-secondary mt-3" onclick="showToast('Edit Profile - coming soon!', 'info')">Edit Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCOUNTS PAGE (Admin) -->
+    <section id="accounts-page" class="page">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Accounts</h3>
+        <button class="btn btn-primary btn-sm" onclick="openAccountForm()">+ Add Account</button>
+      </div>
+
+      <!-- Add/Edit Account Form -->
+      <div id="account-form-card" class="card mb-4 d-none">
+        <div class="card-body">
+          <h5 id="account-form-title">Add Account</h5>
+          <form id="account-form">
+            <div class="row g-2">
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="acc-first" placeholder="First Name" required />
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="acc-last" placeholder="Last Name" required />
+              </div>
+              <div class="col-md-3">
+                <input type="email" class="form-control" id="acc-email" placeholder="Email" required />
+              </div>
+              <div class="col-md-3">
+                <input type="password" class="form-control" id="acc-password" placeholder="Password (min 6)" />
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" id="acc-role">
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+              <div class="col-md-3 d-flex align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="acc-verified" />
+                  <label class="form-check-label" for="acc-verified">Verified</label>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="acc-edit-index" value="" />
+            <div class="mt-2 d-flex gap-2">
+              <button type="submit" class="btn btn-success btn-sm">Save</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closeAccountForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Name</th><th>Email</th><th>Role</th><th>Verified</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="accounts-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DEPARTMENTS PAGE (Admin) -->
+    <section id="departments-page" class="page">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Departments</h3>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Add Department - not implemented yet', 'info')">+ Add Department</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead class="table-dark">
+            <tr><th>Name</th><th>Description</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="departments-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- EMPLOYEES PAGE (Admin) -->
+    <section id="employees-page" class="page">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Employees</h3>
+        <button class="btn btn-primary btn-sm" onclick="openEmployeeForm()">+ Add Employee</button>
+      </div>
+
+      <!-- Add/Edit Employee Form -->
+      <div id="employee-form-card" class="card mb-4 d-none">
+        <div class="card-body">
+          <h5>Add / Edit Employee</h5>
+          <form id="employee-form">
+            <div class="row g-2">
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="emp-id" placeholder="Employee ID" required />
+              </div>
+              <div class="col-md-3">
+                <input type="email" class="form-control" id="emp-email" placeholder="User Email" required />
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="emp-position" placeholder="Position" required />
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" id="emp-dept"></select>
+              </div>
+              <div class="col-md-3">
+                <input type="date" class="form-control" id="emp-hire" required />
+              </div>
+            </div>
+            <input type="hidden" id="emp-edit-index" value="" />
+            <div class="mt-2 d-flex gap-2">
+              <button type="submit" class="btn btn-success btn-sm">Save</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closeEmployeeForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+          <thead class="table-dark">
+            <tr><th>ID</th><th>User (Email)</th><th>Position</th><th>Department</th><th>Hire Date</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="employees-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REQUESTS PAGE -->
+    <section id="requests-page" class="page">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>My Requests</h3>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#requestModal">+ New Request</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+          <thead class="table-dark">
+            <tr><th>Type</th><th>Items</th><th>Date</th><th>Status</th></tr>
+          </thead>
+          <tbody id="requests-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main><!-- /main -->
+
+  <!-- REQUEST MODAL -->
+  <div class="modal fade" id="requestModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">New Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="request-form">
+            <div class="mb-3">
+              <label class="form-label">Request Type</label>
+              <select class="form-select" id="req-type">
+                <option>Equipment</option>
+                <option>Leave</option>
+                <option>Resources</option>
+              </select>
+            </div>
+            <label class="form-label">Items</label>
+            <div id="req-items-container">
+              <div class="req-item row g-2 mb-2">
+                <div class="col-6">
+                  <input type="text" class="form-control item-name" placeholder="Item name" required />
+                </div>
+                <div class="col-4">
+                  <input type="number" class="form-control item-qty" placeholder="Qty" min="1" value="1" required />
+                </div>
+                <div class="col-2">
+                  <button type="button" class="btn btn-danger btn-sm w-100 remove-item-btn">×</button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="add-item-btn">+ Add Item</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submit-request-btn">Submit Request</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
